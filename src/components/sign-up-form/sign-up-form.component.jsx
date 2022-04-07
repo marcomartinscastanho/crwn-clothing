@@ -1,4 +1,5 @@
 import { Fragment, useState } from "react";
+import { FormInput } from "../form-input/form-input.component";
 import {
   createAuthUserWithEmailAndPassword,
   createUserDocumentFromAuth,
@@ -45,23 +46,32 @@ export const SignUpForm = () => {
     <Fragment>
       <h1>Sign Up with your email and password</h1>
       <form onSubmit={handleSubmit}>
-        <label>Display Name</label>
-        <input
+        <FormInput
+          label="Display Name"
           required
           name="displayName"
           type="text"
           value={displayName}
           onChange={handleChange}
         />
-
-        <label>Email</label>
-        <input required name="email" type="email" value={email} onChange={handleChange} />
-
-        <label>Password</label>
-        <input required name="password" type="password" value={password} onChange={handleChange} />
-
-        <label>Confirm Password</label>
-        <input
+        <FormInput
+          label="Email"
+          required
+          name="email"
+          type="email"
+          value={email}
+          onChange={handleChange}
+        />
+        <FormInput
+          label="Password"
+          required
+          name="password"
+          type="password"
+          value={password}
+          onChange={handleChange}
+        />
+        <FormInput
+          label="Confirm Password"
           required
           name="confirmPassword"
           type="password"
