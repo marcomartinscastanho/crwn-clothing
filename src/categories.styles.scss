@@ -1,0 +1,31 @@
+// How it would be in CSS
+// .categories-container {
+//   background-color: red;
+//   padding: 10px;
+// }
+
+// .categories-container .category-container {
+//   background-color: green;
+//   padding: 20px;
+// }
+
+// .categories-container .category-container .category-body-container {
+//   background-color: blue;
+//   padding: 30px;
+// }
+
+// How it is in SASS
+.categories-container {
+  background-color: red;
+  padding: 10px;
+
+  .category-container {
+    background-color: green;
+    padding: 20px;
+
+    .category-body-container {
+      background-color: blue;
+      padding: 30px;
+    }
+  }
+}
