@@ -2,10 +2,11 @@ import { initializeApp } from "firebase/app";
 import {
   createUserWithEmailAndPassword,
   getAuth,
+  GoogleAuthProvider,
+  onAuthStateChanged,
   signInWithPopup,
   signInWithEmailAndPassword,
   signOut,
-  GoogleAuthProvider,
 } from "firebase/auth";
 import { getFirestore, doc, getDoc, setDoc } from "firebase/firestore";
 
@@ -60,3 +61,9 @@ export const signInAuthUserWithEmailAndPassword = async (email, password) => {
 };
 
 export const signOutUser = async () => await signOut(auth);
+
+// onAuthStateChanged defines callback as an Observer
+// it is constantly listening to changes to auth, and when auth changes it calls the callback
+// it returns a function to unsubscribe, i.e. to stop listening
+// it's important to do that to void memory leaks
+export const onAuthStateChangedListener = (callback) => onAuthStateChanged(auth, callback);
