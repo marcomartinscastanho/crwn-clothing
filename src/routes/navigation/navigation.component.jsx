@@ -7,11 +7,7 @@ import { UserContext } from "../../contexts/user.context";
 import "./navigation.styles.scss";
 
 export const Navigation = () => {
-  const { currentUser, setCurrentUser } = useContext(UserContext);
-
-  const handleSignOut = () => {
-    signOutUser().then(() => setCurrentUser(null));
-  };
+  const { currentUser } = useContext(UserContext);
 
   return (
     <Fragment>
@@ -24,7 +20,7 @@ export const Navigation = () => {
             SHOP
           </Link>
           {!!currentUser ? (
-            <span className="nav-link" onClick={handleSignOut}>
+            <span className="nav-link" onClick={signOutUser}>
               SIGN OUT
             </span>
           ) : (

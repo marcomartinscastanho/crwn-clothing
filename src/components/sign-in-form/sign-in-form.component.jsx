@@ -21,7 +21,7 @@ export const SignInForm = () => {
   const resetFormFields = () => setFormFields(defaultFormFields);
 
   const signInWithGoogle = async () => {
-    signInWithGooglePopup().then(({ user }) => createUserDocumentFromAuth(user));
+    signInWithGooglePopup();
   };
 
   const handleSubmit = async (event) => {
