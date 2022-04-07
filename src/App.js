@@ -27,7 +27,7 @@ const App = () => {
   return (
     <div className="categories-container">
       {categories.map((category) => (
-        <div className="category-container">
+        <div className="category-container" key={category.id}>
           <div className="background-image" />
           <div className="category-body-container">
             <h2>{category.title}</h2>
