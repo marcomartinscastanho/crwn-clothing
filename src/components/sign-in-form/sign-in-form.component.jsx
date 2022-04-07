@@ -31,10 +31,15 @@ export const SignInForm = () => {
     signInAuthUserWithEmailAndPassword(email, password)
       .then(resetFormFields)
       .catch((e) => {
-        if (e.code === "auth/wrong-password") {
-          alert("Wrong password");
+        switch (e.code) {
+          case "auth/user-not-found":
+          case "auth/wrong-password":
+            alert("Wrong email and/or password");
+            break;
+          default:
+            console.error("user sign in error", e);
+            break;
         }
-        console.error("user sign in error", e);
       });
   };
 
@@ -66,7 +71,7 @@ export const SignInForm = () => {
         />
         <div className="buttons-container">
           <Button type="submit">Sign In</Button>
-          <Button buttonType="google" onClick={signInWithGoogle}>
+          <Button type="button" buttonType="google" onClick={signInWithGoogle}>
             Google Sign in
           </Button>
         </div>
