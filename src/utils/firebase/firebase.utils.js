@@ -8,7 +8,7 @@ import {
   signInWithEmailAndPassword,
   signOut,
 } from "firebase/auth";
-import { getFirestore, doc, getDoc, setDoc } from "firebase/firestore";
+import { collection, getFirestore, doc, getDoc, setDoc, writeBatch } from "firebase/firestore";
 
 const firebaseConfig = {
   apiKey: "AIzaSyCms1F2JNkUdcS9GOFdSpGSEa91Kajasks",
@@ -67,3 +67,14 @@ export const signOutUser = async () => await signOut(auth);
 // it returns a function to unsubscribe, i.e. to stop listening
 // it's important to do that to void memory leaks
 export const onAuthStateChangedListener = (callback) => onAuthStateChanged(auth, callback);
+
+export const addCollectionAndDocuments = async (collectionKey, objectsToAdd) => {
+  const collectionRef = collection(db, collectionKey);
+  const batch = writeBatch(db);
+  objectsToAdd.forEach((objectToAdd) => {
+    const docRef = doc(collectionRef, objectToAdd.title.toLowerCase());
+    batch.set(docRef, objectToAdd);
+  });
+
+  await batch.commit();
+};
