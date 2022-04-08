@@ -10,7 +10,8 @@ const App = () => {
     <Routes>
       <Route path="/" element={<Navigation />}>
         <Route index element={<Home />} />
-        <Route path="shop" element={<Shop />} />
+        {/* whatever starts with 'shop/' will be routed to the Shop component, which will have it's own routes inside */}
+        <Route path="shop/*" element={<Shop />} />{" "}
         <Route path="auth" element={<Authentication />} />
         <Route path="checkout" element={<Checkout />} />
       </Route>
