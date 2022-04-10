@@ -1,14 +1,16 @@
-import "./directory-item.styles.scss";
+import { BackgroundImage, Body, DirectoryItemContainer } from "./directory-item.styles";
 
 export const DirectoryItem = ({ category }) => {
+  const { imageUrl, title } = category;
   return (
-    <div className="directory-item-container">
-      <div className="background-image" style={{ backgroundImage: `url(${category.imageUrl})` }} />
-      <div className="body">
-        <h2>{category.title}</h2>
+    <DirectoryItemContainer>
+      {/* imageUrl could be called whatever, it's whatever name we decide to pass a prop into the styled component */}
+      <BackgroundImage imageUrl={imageUrl} />
+      <Body>
+        <h2>{title}</h2>
         <p>Shop Now</p>
-      </div>
-    </div>
+      </Body>
+    </DirectoryItemContainer>
   );
 };
 
