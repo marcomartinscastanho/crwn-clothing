@@ -1,4 +1,5 @@
-import { createContext, useEffect, useState } from "react";
+import { createContext, useReducer } from "react";
+import { createAction } from "../utils/reducer/reducer.utils";
 
 const addCartItem = (cartItems, productToAdd) => {
   const existingCartItem = cartItems.find((cartItem) => cartItem.id === productToAdd.id);
@@ -38,31 +39,85 @@ export const CartContext = createContext({
   cartTotal: 0,
 });
 
+const CART_ACTION_TYPES = {
+  SET_CART_ITEMS: "SET_CART_ITEMS",
+  SET_IS_CART_OPEN: "SET_IS_CART_OPEN",
+};
+
+// HOW TO WRITE A REDUCER CONTEXT:
+// 1. First thing - we need to think about the shape of our output
+// create the INITAIL_STATE
+const INITAIL_STATE = {
+  isCartOpen: false,
+  cartItems: [],
+  cartCount: 0,
+  cartTotal: 0,
+};
+
+// 2. start writing about the reducer
+const cartReducer = (state, action) => {
+  const { type, payload } = action;
+
+  switch (type) {
+    // 3. think about the cases
+    // Important Best Practice: the reduce should not handle any business logic!
+    // All the reducer function should care about is just updating the state
+    // It should not care of nothing regarding how to update the state (with which values)
+    case CART_ACTION_TYPES.SET_CART_ITEMS:
+      // payload here should have the new cartItems, new cartCount and new cartTotal
+      return { ...state, ...payload };
+    case CART_ACTION_TYPES.SET_IS_CART_OPEN:
+      return { ...state, isCartOpen: payload };
+    default:
+      throw new Error(`Unhandled type of ${type} in cartReducer`);
+  }
+};
+
 export const CartProvider = ({ children }) => {
-  const [isCartOpen, setIsCartOpen] = useState(false);
-  const [cartItems, setCartItems] = useState([]);
-  const [cartCount, setCartCount] = useState(0);
-  const [cartTotal, setCartTotal] = useState(0);
+  // 5. create the reducer
+  const [state, dispatch] = useReducer(cartReducer, INITAIL_STATE);
+  const { cartItems, cartCount, cartTotal, isCartOpen } = state;
 
-  const addItemToCart = (productToAdd) => setCartItems(addCartItem(cartItems, productToAdd));
-  const removeItemFromCart = (cartItemToRemove) =>
-    setCartItems(removeCartItem(cartItems, cartItemToRemove));
-  const clearItemFromCart = (cartItemToClear) =>
-    setCartItems(clearCartItem(cartItems, cartItemToClear));
-
-  // each useEffect should have a single responsibility
-  useEffect(() => {
-    const newCardCount = cartItems.reduce((total, cartItem) => total + cartItem.quantity, 0);
-    setCartCount(newCardCount);
-  }, [cartItems]);
-
-  useEffect(() => {
-    const newCardTotal = cartItems.reduce(
+  // 4. write a function to get the new values and dispatch the appropriate payload to update the cartReducer with
+  const updateCartItemReducer = (newCartItems) => {
+    const newCartCount = newCartItems.reduce((total, cartItem) => total + cartItem.quantity, 0);
+    const newCartTotal = newCartItems.reduce(
       (total, cartItem) => total + cartItem.quantity * cartItem.price,
       0
     );
-    setCartTotal(newCardTotal);
-  }, [cartItems]);
+
+    // 6. dispatch the new action we want to generate
+    dispatch(
+      createAction(CART_ACTION_TYPES.SET_CART_ITEMS, {
+        cartItems: newCartItems,
+        cartCount: newCartCount,
+        cartTotal: newCartTotal,
+      })
+    );
+
+    /**
+     * THIS IS WHEN WE USE REDUCERS:
+     * When one update needs to modify multiple readable values inside of our state (app state)
+     * This is a good example
+     * An update to the cart item updates 3 readable state values
+     */
+  };
+
+  const setIsCartOpen = (isOpen) =>
+    dispatch(createAction(CART_ACTION_TYPES.SET_IS_CART_OPEN, isOpen));
+
+  const addItemToCart = (productToAdd) => {
+    const newCartItems = addCartItem(cartItems, productToAdd);
+    updateCartItemReducer(newCartItems);
+  };
+  const removeItemFromCart = (cartItemToRemove) => {
+    const newCartItems = removeCartItem(cartItems, cartItemToRemove);
+    updateCartItemReducer(newCartItems);
+  };
+  const clearItemFromCart = (cartItemToClear) => {
+    const newCartItems = clearCartItem(cartItems, cartItemToClear);
+    updateCartItemReducer(newCartItems);
+  };
 
   const value = {
     isCartOpen,
