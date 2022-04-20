@@ -5,9 +5,9 @@ export const USER_ACTION_TYPES = {
 const INITIAL_STATE = {
   currentUser: null,
 };
+
 // Because we're no longer using useReducer - where we can specify the inital state
 // we need to tell the function here what is the default value of state.
-
 export const userReducer = (state = INITIAL_STATE, action) => {
   const { type, payload } = action;
 
