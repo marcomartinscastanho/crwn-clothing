@@ -27,7 +27,10 @@ const App = () => {
 
     // this runs when the component unmounts
     return unsubscribe;
-  }, [dispatch]);
+  }, [dispatch]); // this is actually not necessary
+  // Everything that comes from a hook can change
+  // So React likes everything that can change that is used inside useEffect to be included in the useEffect dependencies
+  // But in reallity the react-redux dispatch never changes, it's always the same single dispatch
 
   return (
     <Routes>
