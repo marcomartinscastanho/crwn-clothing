@@ -11,7 +11,7 @@ export const fetchCategoriesSuccess = (categoriesArray) =>
 export const fetchCategoriesFailed = (error) =>
   createAction(CATEGORIES_ACTION_TYPES.FETCH_CATEGORIES_SUCCESS, error);
 
-// thunk action that triggers all of the above
+// thunk action that triggers all of the above actions
 export const fetchCategoriesAsync = () => async (dispatch) => {
   dispatch(fetchCategoriesStart());
   try {

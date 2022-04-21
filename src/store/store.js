@@ -8,7 +8,10 @@ import { rootReducer } from "./root-reducer";
 const persistConfig = {
   key: "root",
   storage,
-  blacklist: ["user"],
+  whitelist: ["cart"],
+  // because we now have a spinner, we no longer need to keep the categories
+  // since we're showing a spinner while we fetch the categories from the db
+  // so basically all we want to keep in the LocalStorage is the cart
 };
 
 const persistedReducer = persistReducer(persistConfig, rootReducer);
