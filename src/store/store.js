@@ -7,7 +7,7 @@ import { rootReducer } from "./root-reducer";
 // example
 const curryFunc = (a) => (b, c) => a + b - c;
 const with3 = curryFunc(3); // a = 3
-const res = with3(2, 4); // 3 + 2 - 4 = 1
+with3(2, 4); // 3 + 2 - 4 = 1
 // it's basically a function generator to create re-usable functions
 
 // middlewares are currying functions
