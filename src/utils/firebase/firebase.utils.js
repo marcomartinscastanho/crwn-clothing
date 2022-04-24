@@ -74,7 +74,7 @@ export const signOutUser = async () => await signOut(auth);
 // onAuthStateChanged defines callback as an Observer
 // it is constantly listening to changes to auth, and when auth changes it calls the callback
 // it returns a function to unsubscribe, i.e. to stop listening
-// it's important to do that to void memory leaks
+// it's important to do that to avoid memory leaks
 export const onAuthStateChangedListener = (callback) => onAuthStateChanged(auth, callback);
 
 export const addCollectionAndDocuments = async (collectionKey, objectsToAdd) => {
@@ -94,4 +94,19 @@ export const getCategoriesAndDocuments = async () => {
   const querySnapshot = await getDocs(q);
 
   return querySnapshot.docs.map((docSnapshot) => docSnapshot.data());
+};
+
+export const getCurrentUser = () => {
+  return new Promise((resolve, reject) => {
+    const unsubscribe = onAuthStateChanged(
+      auth,
+      // callback
+      (userAuth) => {
+        unsubscribe();
+        resolve(userAuth);
+      },
+      // error callback
+      reject
+    );
+  });
 };

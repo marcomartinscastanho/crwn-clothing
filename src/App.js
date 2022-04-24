@@ -4,6 +4,7 @@ import { Routes, Route } from "react-router-dom";
 import {
   createUserDocumentFromAuth,
   onAuthStateChangedListener,
+  getCurrentUser,
 } from "./utils/firebase/firebase.utils";
 import { Navigation } from "./routes/navigation/navigation.component";
 import { Authentication } from "./routes/auth/auth.component";
@@ -17,16 +18,18 @@ const App = () => {
 
   // the user is needed at the entire application
   useEffect(() => {
-    const unsubscribe = onAuthStateChangedListener((user) => {
-      if (user) {
-        createUserDocumentFromAuth(user);
-      }
+    getCurrentUser().then(console.log);
 
-      dispatch(setCurrentUser(user));
-    });
+    // const unsubscribe = onAuthStateChangedListener((user) => {
+    //   if (user) {
+    //     createUserDocumentFromAuth(user);
+    //   }
+
+    //   dispatch(setCurrentUser(user));
+    // });
 
     // this runs when the component unmounts
-    return unsubscribe;
+    // return unsubscribe;
   }, [dispatch]);
 
   return (
