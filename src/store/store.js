@@ -2,7 +2,10 @@ import { compose, createStore, applyMiddleware } from "redux";
 import { persistStore, persistReducer } from "redux-persist";
 import storage from "redux-persist/lib/storage";
 import logger from "redux-logger";
-import thunk from "redux-thunk";
+// either you use sagas or thunks, their purpose is the same
+// import thunk from "redux-thunk";
+import createSagaMiddleware from "redux-saga";
+import { rootSaga } from "./root-saga";
 import { rootReducer } from "./root-reducer";
 
 const persistConfig = {
@@ -15,9 +18,14 @@ const persistConfig = {
 };
 
 const persistedReducer = persistReducer(persistConfig, rootReducer);
+const sagaMiddleware = createSagaMiddleware();
 
 // middlewares are triggered before any action
-const middleWares = [process.env.NODE_ENV !== "production" && logger, thunk].filter(Boolean);
+const middleWares = [
+  process.env.NODE_ENV !== "production" && logger,
+  //  thunk,
+  sagaMiddleware,
+].filter(Boolean);
 // thunks allow actions to be passed as functions
 // what we want to use thunks to move asynchronous behaviours into action-driven flows
 
@@ -29,4 +37,5 @@ const composeEnhencer =
 const composedEnhancers = composeEnhencer(applyMiddleware(...middleWares));
 
 export const store = createStore(persistedReducer, undefined, composedEnhancers);
+sagaMiddleware.run(rootSaga);
 export const persistor = persistStore(store);
