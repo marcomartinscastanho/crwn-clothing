@@ -17,6 +17,9 @@ export const categoriesReducer = (
   state = CATEGORIES_INITIAL_STATE,
   action = {} as CategoryAction
 ) => {
+  // even if we define action as a CategoryAction, redux will pass all actions though all reducers
+  // so when an action that isn't a CategoryAction gets here, there will be an error
+
   switch (action.type) {
     case CATEGORIES_ACTION_TYPES.FETCH_CATEGORIES_START:
       return { ...state, isLoading: true };
