@@ -1,4 +1,5 @@
 import { createSelector } from "reselect";
+import { RootState } from "../store";
 import { CategoriesState } from "./category.reducer";
 import { CategoryMap } from "./category.types";
 
@@ -8,7 +9,7 @@ import { CategoryMap } from "./category.types";
 
 // in order to use this with selectors, we have to create inputSelectors and outputSelectors
 
-const selectCategoryReducer = (state): CategoriesState => state.categories;
+const selectCategoryReducer = (state: RootState): CategoriesState => state.categories;
 
 // the output selector runs only if the return of the input selector changes
 export const selectCategories = createSelector(
