@@ -1,4 +1,4 @@
-import { takeLatest, all, call, put } from "typed-redux-saga";
+import { takeLatest, all, call, put } from "typed-redux-saga/macro";
 import { getCategoriesAndDocuments } from "../../utils/firebase/firebase.utils";
 import { fetchCategoriesSuccess, fetchCategoriesFailed } from "./category.action";
 import { CATEGORIES_ACTION_TYPES } from "./category.types";
@@ -8,9 +8,9 @@ export function* fetchCategoriesAsync() {
     // yield call() is like the await, but you don't use await inside a generator
     const categoriesArray = yield* call(getCategoriesAndDocuments);
     // yield put() is like the dispatch, but you don't dispatch things from a generator
-    yield* put(fetchCategoriesSuccess(categoriesArray));
+    yield put(fetchCategoriesSuccess(categoriesArray));
   } catch (error) {
-    yield* put(fetchCategoriesFailed(error as Error));
+    yield put(fetchCategoriesFailed(error as Error));
   }
 }
 
